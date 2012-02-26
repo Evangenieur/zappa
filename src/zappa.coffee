@@ -220,7 +220,11 @@ zappa.app = (func) ->
       switch typeof a
         when 'function' then app.use a
         when 'string' then use a
-        when 'object' then use k, v for k, v of a
+        when 'object'
+          if a.stack? or a.route?
+            app.use a
+          else
+            use k, v for k, v of a
     
   context.configure = (p) ->
     if typeof p is 'function' then app.configure p
